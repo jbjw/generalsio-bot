@@ -17,10 +17,19 @@ export default (state = {}, action) => {
 			chats = chats.concat( action.payload.message )
 			return { ...state, chats: chats } // { chats}
 
+		case undefined:
 
 		default:
 			return state
 	}
+}
+
+
+// spreadinbvalue as object
+
+// test value on root, vs object encapsulate,
+export function r2(value) {
+	state
 }
 
 // subreducers

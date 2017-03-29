@@ -13,11 +13,19 @@ import init from './bot.js'
 import { Provider } from 'react-redux'
 
 // import Redux from 'redux'
-import { createStore } from 'redux'
+import { createStore, combineReducers, applyMiddleware } from 'redux'
+import thunk from 'redux-thunk'
 
 import reducer from './reducers.js'
+import stuff from './reducers/stuff.js'
 
-const store = createStore( reducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__() )
+const rootReducer = combineReducers({
+		chats: reducer,
+		stuff
+})
+
+const store = createStore( rootReducer, applyMiddleware(thunk),
+	window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__() )
 
 // function rerender() {
 //
@@ -25,11 +33,12 @@ const store = createStore( reducer, window.__REDUX_DEVTOOLS_EXTENSION__ && windo
 
 init( store )
 
+connect( store )
 // '/users': <UsersPage>
 
 ReactDOM.render(
 	<Provider store={store}>
-		<BotView />
+		<BotView/>
 	</Provider>,
 	document.getElementById('root')
 )

@@ -12,7 +12,7 @@ var config = {
 		contentBase: 'dist/',
 		port: 80,
 	},
-	entry: path.resolve(APP_DIR, 'main.js'),
+	entry: path.resolve(APP_DIR, 'main.jsx'),
 	output: {
 		path: BUILD_DIR,
 		filename: 'bundle.js',
@@ -24,7 +24,7 @@ var config = {
 				loader: 'babel-loader',
 				exclude: /node_modules/,
 				query: {
-					presets: ['es2015', 'react', 'stage-2'],
+					'presets': ['react', 'es2015', 'stage-3'], // , 'stage-3'
 				},
 			},
 		],
