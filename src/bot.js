@@ -3,16 +3,20 @@ var socket = require('socket.io-client')('http://botws.generals.io')
 var user_id = 'my_example_bot_id'
 var username = '[Bot] Example Bot'
 
+import Actions from './actions'
+
+
+
 // env replace e.g. var user_id = process.env.BOT_USER_ID;
 
 export default class Bot {
 	constructor() {
 		socket.on('connect', function(data) {
-			console.log('Connected to server.', data)
+			Actions.log('Connected to server.', data)
 		})
 
 		socket.on('disconnect', function(data) {
-			console.error('Disconnected from server.', data)
+			Actions.log('Disconnected from server.', data)
 			// process.exit(1)
 		})
 
@@ -26,12 +30,12 @@ export default class Bot {
 		socket.on( 'game_start', callback( data ) )
 	}
 
-	customGame() {
+	startCustomGame() {
 		var custom_game_id = 'my_private_game'
 		socket.emit('join_private', custom_game_id, user_id)
 		socket.emit('set_force_start', custom_game_id, true)
 		// socket.emit('set_custom_team', custom_game_id, team)
-		console.log('Joined custom game at http://bot.generals.io/games/' + encodeURIComponent(custom_game_id));
+		Actions.log('Joined custom game at http://bot.generals.io/games/' + encodeURIComponent(custom_game_id));
 
 		socket.on('game_start', function(data) {
 			// replace with obj destructuring
@@ -43,23 +47,23 @@ export default class Bot {
 			this.teams = data.teams
 			this.replay_url = 'http://bot.generals.io/replays/' + encodeURIComponent(this.replay_id)
 
-			console.log('Game starting! The replay will be available after the game at ' + this.replay_url)
+			Actions.log('Game starting! The replay will be available after the game at ' + this.replay_url)
 
 			socket.emit('chat_message', this.chat_room, 'test chat message');
 
 			socket.on('game_lost', function(data) {
-				console.log('game lost')
+				Actions.log('game lost')
 				socket.emit('leave_game')
 			})
 
 			socket.on('game_won', function(data) {
-				console.log('game won')
+				Actions.log('game won')
 				socket.emit('leave_game')
 			})
 
 			// let chatMessages = []
 			socket.on('chat_message', function(chat_room, data) {
-				console.log('chat msg:', data)
+				Actions.log('chat msg:', data)
 			})
 		})
 
@@ -160,10 +164,11 @@ export default class Bot {
 	}
 
 	set username(x) {
-		socket.emit('set_username', user_id, username)
-		socket.on('error_set_username', function(data) {
-			console.log(`Error setting username?: ${data}`)
-		})
+		socket.emit( 'set_username', user_id, username )
+		Actions.log( `setting username to {x}` )
+		socket.on( 'error_set_username', function(data) {
+			Actions.log(`Error setting username?: ${data}`)
+		} )
 	}
 }
 

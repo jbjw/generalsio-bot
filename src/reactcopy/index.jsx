@@ -19,7 +19,7 @@ export default class BotView extends React.Component {
 		this.setState({
 			logs: this.state.logs.concat(e.key),
 			// messages: this.state.logs.concat(e.key),
-		});
+		})
 	}
 
 	// onKeyPress = (e) => {
@@ -29,16 +29,21 @@ export default class BotView extends React.Component {
 	// 	});
 	// }
 
-	onClick(e) {
-		console.log(e)
-	}
-
 	render() {
 		return <div>
 			<Console logs={this.state.logs}></Console>
-			<Chat messages={this.state.messages} sendChat={this.props.sendChat}></Chat>
+			<Chat messages={this.state.messages}></Chat>
+			<StartButton {...this.props}/>
 		</div>
 	}
+}
+
+function StartButton( props ) {
+	function onClick() {
+		props.bot.customGame()
+		console.log('start button', this)
+	}
+	return <input type="button" value="Start" onClick={onClick}></input>
 }
 
 function Console(props) {
@@ -52,7 +57,7 @@ function Chat(props) {
 	return <div className="chat">
 		<h2>Chat:</h2>
 		{props.messages.map( (msg, i) => <p key={i}>{msg}</p> )}
-		<ChatInput sendChat={props.sendChat}></ChatInput>
+		<ChatInput></ChatInput>
 	</div>
 }
 
@@ -60,13 +65,12 @@ function ChatInput(props) {
 	function onKeyPress(e) {
 		// console.log(e.key)
 		if (e.key == 'Enter') {
-			props.sendChat(e.target.value)
+			// props.sendChat(e.target.value)
 			e.target.value = ''
 		}
 	}
 
-	return <input type="text" placeholder="Enter cat msg hurr" className="chat-input" onKeyPress={onKeyPress}>
-	</input>
+	return <input type="text" placeholder="Enter cat msg hurr" className="chat-input" onKeyPress={onKeyPress} />
 }
 
 function ChatMessage(props) {

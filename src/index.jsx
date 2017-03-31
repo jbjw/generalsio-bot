@@ -1,8 +1,23 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 
-export default class BotView extends React.Component {
+import { connect } from 'react-redux'
+
+import Actions from './actions.js'
+
+class BotView extends React.Component {
+	// boolean altKey
+	// number charCode
+	// boolean ctrlKey
+	// boolean getModifierState(key)
+	// string key
+	// number keyCode
+	// boolean metaKey
+	// boolean repeat
+	// boolean shiftKey
+
 	// switch to prop init syntax?
+
 	// check this set correct without binding react
 
 	constructor(props) {
@@ -19,7 +34,7 @@ export default class BotView extends React.Component {
 		this.setState({
 			logs: this.state.logs.concat(e.key),
 			// messages: this.state.logs.concat(e.key),
-		})
+		});
 	}
 
 	// onKeyPress = (e) => {
@@ -29,21 +44,25 @@ export default class BotView extends React.Component {
 	// 	});
 	// }
 
+	onClick(e) {
+		console.log(e)
+	}
+
 	render() {
 		return <div>
 			<Console logs={this.state.logs}></Console>
-			<Chat messages={this.state.messages}></Chat>
-			<StartButton {...this.props}/>
+			<Chat messages={this.state.messages} sendChat={this.props.sendChat}></Chat>
+			<StartButton {...this.props}></StartButton>
 		</div>
 	}
 }
 
-function StartButton( props ) {
-	function onClick() {
-		props.bot.customGame()
-		console.log('start button', this)
+function StartButton(props) {
+	function onClick(e) {
+		props.bot.startCustomGame()
+		// Actions.startCustomGame()
 	}
-	return <input type="button" value="Start" onClick={onClick}></input>
+	return <input type='button' value='Start Custom' onClick={onClick}></input>
 }
 
 function Console(props) {
@@ -57,7 +76,7 @@ function Chat(props) {
 	return <div className="chat">
 		<h2>Chat:</h2>
 		{props.messages.map( (msg, i) => <p key={i}>{msg}</p> )}
-		<ChatInput></ChatInput>
+		<ChatInput sendChat={props.sendChat}></ChatInput>
 	</div>
 }
 
@@ -65,12 +84,13 @@ function ChatInput(props) {
 	function onKeyPress(e) {
 		// console.log(e.key)
 		if (e.key == 'Enter') {
-			// props.sendChat(e.target.value)
+			props.sendChat(e.target.value)
 			e.target.value = ''
 		}
 	}
 
-	return <input type="text" placeholder="Enter cat msg hurr" className="chat-input" onKeyPress={onKeyPress} />
+	return <input type="text" placeholder="Enter cat msg hurr" className="chat-input" onKeyPress={onKeyPress}>
+	</input>
 }
 
 function ChatMessage(props) {
@@ -81,3 +101,20 @@ function ChatMessage(props) {
 // <Players></Players>
 // <Chat></Chat>
 // <Console></Console>
+
+// this is the store state, not the view state
+function mapStateToProps(state) {
+	return { logs: state.logs }
+}
+
+function mapDispatchToProps(dispatch) {
+	return {
+		sendChat: msg => dispatch( Actions.sendChat( msg ) ),
+		// log: msg => dispatch( Actions.log( msg ) ),
+	}
+}
+
+export default connect(
+	mapStateToProps,
+	// mapDispatchToProps,
+)(BotView);

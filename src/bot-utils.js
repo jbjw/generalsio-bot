@@ -1,3 +1,4 @@
+
 /* Returns a new array created by patching the diff into the old array.
  * The diff formatted with alternating matching and mismatching segments:
  * <Number of matching elements>
@@ -7,7 +8,8 @@
  * Example 1: patching a diff of [1, 1, 3] onto [0, 0] yields [0, 3].
  * Example 2: patching a diff of [0, 1, 2, 1] onto [0, 0] yields [2, 0].
  */
-function patch(old, diff) {
+ 
+export function patch(old, diff) {
 	var out = [];
 	var i = 0;
 	while (i < diff.length) {
@@ -23,5 +25,3 @@ function patch(old, diff) {
 	}
 	return out;
 }
-
-module.exports = patch

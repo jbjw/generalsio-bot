@@ -14,7 +14,7 @@ export function sendChat( msg ) {
 }
 
 // thunk: add thunkware as middleware to store creation
-export function fetchNetNum( ) {
+export function fetchNetNum() {
 	return function( dispatch ) {
 		fetch.request('/netnum')
 			.then( res ) {
