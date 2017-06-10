@@ -1,10 +1,10 @@
 // var webpack = require('webpack');
-var path = require('path');
+const path = require('path');
 
-var BUILD_DIR = path.resolve(__dirname, 'dist');
-var APP_DIR = path.resolve(__dirname, 'src');
+const DIST = path.resolve(__dirname, 'dist');
+const SRC = path.resolve(__dirname, 'src');
 
-var config = {
+module.exports = {
 	devtool: 'source-map',
 	devServer: {
 		inline: true,
@@ -12,9 +12,9 @@ var config = {
 		contentBase: 'dist/',
 		port: 80,
 	},
-	entry: path.resolve(APP_DIR, 'main.jsx'),
+	entry: path.resolve(DIST, 'main.js'),
 	output: {
-		path: BUILD_DIR,
+		path: SRC,
 		filename: 'bundle.js',
 	},
 	module: {
@@ -24,11 +24,9 @@ var config = {
 				loader: 'babel-loader',
 				exclude: /node_modules/,
 				query: {
-					'presets': ['react', 'es2015', 'stage-3'], // , 'stage-3'
+					presets: ['es2015', 'react'],
 				},
 			},
 		],
 	},
 };
-
-module.exports = config;
